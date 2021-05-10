@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">inventorymanagement</string>
+    <string name="msg_qty">Qty</string>
+    <string name="action_search">Search</string>
+    <string name="action_save">Save</string>
+    <string name="search">Search</string>
+    <string name="manufacturer">manufacturer</string>
+    <string name="action_select">Select</string>
+    <string name="msg_upload_inventory">Upload Inventory</string>
+    <string name="msg_search_inventory">Search Inventory</string>
+</resources>

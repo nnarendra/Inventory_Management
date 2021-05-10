@@ -1,0 +1,9 @@
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingDefaultResource"> <!-- Enable automatic Activity measurement -->
+    <bool name="ga_autoActivityTracking">true
+    </bool> <!-- The property id associated with this analytics tracker -->
+    <string
+        name="ga_trackingId"
+        translatable="false">G-0N4TLQEVJS-</string> <!-- End current session if app sleeps for a period of time -->
+    <integer name="ga_sessionTimeout">500</integer>
+</resources>

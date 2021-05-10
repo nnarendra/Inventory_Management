@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_margin="@dimen/dp_8"
+    android:layout_height="match_parent"
+    tools:context=".UpdateInventoryActivity">
+
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_marginRight="@dimen/dp_8"
+        android:layout_marginLeft="@dimen/dp_8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bt_search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="1.5dp"
+            android:background="@drawable/ripple_effect"
+            android:text="@string/action_search"
+            android:textAllCaps="true" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="1.5dp"
+            android:background="@drawable/ripple_effect"
+            android:layout_weight="1"
+            android:text="@string/action_save"
+            android:textStyle="bold"
+            android:textAllCaps="true" />
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/constraintLayout2"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        android:layout_marginRight="@dimen/dp_8"
+        android:layout_marginLeft="@dimen/dp_8"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/msg_upload_inventory"
+            android:layout_width="0dp"
+            android:layout_weight="2.3"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:padding="4dp"
+            android:text="Upload Inventory"
+            android:textSize="@dimen/sp_30" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_network_status"
+            android:layout_width="0dp"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_10"
+            android:gravity="center"
+            android:background="@drawable/rounded_corner"
+            android:layout_weight="0.7"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content"
+            tools:text="ON Line"
+            android:textAllCaps="true" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_update_items_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_8"
+        android:layout_marginEnd="@dimen/dp_8"
+        android:layout_marginTop="@dimen/dp_8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
