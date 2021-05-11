@@ -13,6 +13,7 @@
         android:padding="@dimen/dp_5"
         android:background="@drawable/rounded_corner"
         android:hint="@string/msg_qty"
+        android:inputType="number"
         android:textSize="@dimen/sp_18"
         android:paddingTop="@dimen/dp_10"
         android:paddingBottom="@dimen/dp_10"

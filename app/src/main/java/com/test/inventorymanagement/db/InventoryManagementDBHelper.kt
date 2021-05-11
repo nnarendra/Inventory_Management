@@ -28,23 +28,5 @@ class InventoryManagementDBHelper(context: Context) :
 
     }
 
-    //method to insert data
-    fun addItem(item: Item):Long{
-        val db = this.writableDatabase
-        val contentValues = ContentValues()
-        contentValues.put(Constants.SERVER_ID, item.id)
-        contentValues.put(Constants.NAME, item.name)
-        contentValues.put(Constants.SKU, item.sku)
-        contentValues.put(Constants.MANUFACTURER,item.manufacturer )
-        contentValues.put(Constants.QUANTITY, item.quantity.toInt())
-        contentValues.put(Constants.UNIT,item.unit )
-        // Inserting Row
-        var success:Long = db.insert(Constants.TABLE_NAME, null, contentValues)
-        if(success<=-1){
-            success = db.update(Constants.TABLE_NAME, contentValues,"server_id= '"+item.id+"'",null).toLong()
-        }
 
-        db.close()
-        return success
-    }
 }

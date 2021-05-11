@@ -1,5 +1,6 @@
 package com.test.inventorymanagement.viewmodels
 
+import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteException
 import android.util.Log
@@ -71,7 +72,7 @@ class InventoryManagementViewModel : ViewModel() {
             itemsList.add(item)
 
             if (needToInsertFlag) {
-                databaseHandler?.addItem(item)
+               addItem(item)
             }
 
         }
@@ -84,25 +85,19 @@ class InventoryManagementViewModel : ViewModel() {
         selectedItemsList: ArrayList<String>, needFromSQL: Boolean
     ) {
         val name: String = namea.capitalize()
-        val finalSelectedItems: ArrayList<String> = ArrayList<String>()
-        val templist = selectedItems.split(",").toTypedArray()
-        for (item: String in selectedItemsList) {
-            if (templist.contains(item)) {
-                finalSelectedItems.add(item)
-            }
-        }
-        if (name.isNotEmpty() && finalSelectedItems.isNotEmpty()) {
+
+        if (name.isNotEmpty() && selectedItemsList.isNotEmpty()) {
             if (needFromSQL) {
-                getItemListWithSelectedItemFiltersFromSQL(finalSelectedItems)
+                getItemListWithSTwoFiltersFromSQL(name,selectedItemsList)
             } else {
-                getItemListWithSelectedItemFilters(finalSelectedItems)
+                getItemListWithSelectedItemFilters(selectedItemsList)
             }
-            getItemListWithSelectedItemFilters(finalSelectedItems)
-        } else if (finalSelectedItems.isNotEmpty()) {
+
+        } else if (selectedItems.isNotEmpty()) {
             if (needFromSQL) {
-                getItemListWithSelectedItemFiltersFromSQL(finalSelectedItems)
+                getItemListWithSelectedItemFiltersFromSQL(selectedItemsList)
             } else {
-                getItemListWithSelectedItemFilters(finalSelectedItems)
+                getItemListWithSelectedItemFilters(selectedItemsList)
             }
 
         } else if (name.isNotEmpty()) {
@@ -118,11 +113,48 @@ class InventoryManagementViewModel : ViewModel() {
         }
     }
 
+    private fun getItemListWithSTwoFiltersFromSQL(name: String,selectedItemsList: java.util.ArrayList<String>) {
+        val itemList: ArrayList<Item>
+        val args:String=selectedItemsList.joinToString(separator = "','")
+        val db = databaseHandler?.readableDatabase
+        var cursor: Cursor? = db?.query(
+
+            Constants.TABLE_NAME,
+            null,
+            Constants.KEY_NAME + " like ? OR manufacturer in('$args')",
+            arrayOf("$name%"),
+            null,
+            null,
+            "quantity Desc",
+            null
+        )
+        itemList=getItemsFromCursor(cursor)
+        if (itemList.isNotEmpty()){
+            dataChangeListener?.OnItemsListReceived(itemList)
+        }else{
+            dataChangeListener?.OnError("No items found")
+        }
+    }
+
     private fun getItemListWithNameFiltersFromSQL(name: String) {
         val itemList: ArrayList<Item>
         val db = databaseHandler?.readableDatabase
-        val cursor: Cursor? = db?.rawQuery("SELECT * FROM items where name like '%" + name
-                + "%'", null)
+       /* var cursor: Cursor? = db?.rawQuery(
+            "SELECT * FROM items where name like '%" + name
+                    + "%'", null
+        )*/
+
+        var cursor: Cursor? = db?.query(
+
+            Constants.TABLE_NAME,
+            null,
+            Constants.KEY_NAME + " like ?",
+            arrayOf("$name%"),
+            null,
+            null,
+            "quantity Desc",
+            null
+        )
         itemList=getItemsFromCursor(cursor)
         if (itemList.isNotEmpty()){
             dataChangeListener?.OnItemsListReceived(itemList)
@@ -132,12 +164,20 @@ class InventoryManagementViewModel : ViewModel() {
     }
 
     private fun getItemListWithSelectedItemFiltersFromSQL(finalSelectedItems: ArrayList<String>) {
-        var itemList: ArrayList<Item> = ArrayList<Item>()
+        var itemList: ArrayList<Item>
         val args:String=finalSelectedItems.joinToString(separator = "','")
         //val selectQuery = "SELECT  * FROM items where  manufacturer in('$args') order by quantity Desc"
         val db = databaseHandler?.readableDatabase
         val cursor: Cursor? =
-            db?.query(Constants.TABLE_NAME, null, "manufacturer in('$args')", null, null, null, "quantity Desc")
+            db?.query(
+                Constants.TABLE_NAME,
+                null,
+                "manufacturer in('$args')",
+                null,
+                null,
+                null,
+                "quantity Desc"
+            )
         itemList=getItemsFromCursor(cursor)
         if (itemList.isNotEmpty()){
             dataChangeListener?.OnItemsListReceived(itemList)
@@ -287,7 +327,32 @@ class InventoryManagementViewModel : ViewModel() {
         }
     }
 
+    //method to insert data
+    fun addItem(item: Item): Long? {
+        val db = databaseHandler?.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(Constants.SERVER_ID, item.id)
+        contentValues.put(Constants.NAME, item.name)
+        contentValues.put(Constants.SKU, item.sku)
+        contentValues.put(Constants.MANUFACTURER, item.manufacturer)
+        contentValues.put(Constants.QUANTITY, item.quantity.toInt())
+        contentValues.put(Constants.UNIT, item.unit)
+        // Inserting Row
+        var success: Long? = db?.insert(Constants.TABLE_NAME, null, contentValues)
 
+            if(success != null&&success<=-1){
+                success = db?.update(
+                    Constants.TABLE_NAME,
+                    contentValues,
+                    "server_id= '" + item.id + "'",
+                    null
+                )?.toLong()
+
+            }
+
+        db?.close()
+        return success
+    }
 }
 
 

@@ -10,6 +10,8 @@ object Constants {
     const val UNIT:String = "unit"
     const val TABLE_NAME:String = "items"
     const val FIREBASE_TABLE_NAME:String = "Items"
+    const val KEY_ROWID:String = "row"
+    const val KEY_NAME:String = "name"
 
 
 
